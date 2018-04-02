@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 
 class Departamento(models.Model):
-    nome = models.CharFiel(max_length=50, null=False)
+    nome = models.CharField(max_length=50, null=False)
 
 
 class Pessoa(models.Model):
@@ -12,7 +12,7 @@ class Pessoa(models.Model):
         ('feminino', 'Feminino'),
         ('masculino', 'Masculino'),
     )
-    nome = models.CharFiel(max_length=50, null=False)
+    nome = models.CharField(max_length=50, null=False)
     sexo = models.CharField(max_length=10, null=False, choices=SEXO_CHOICES)
     data_nascimento = models.DateField(null=False, verbose_name='Data de Nascimento')
     cpf = models.CharField(max_length=13)
