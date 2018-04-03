@@ -6,6 +6,9 @@ from django.db import models
 class Departamento(models.Model):
     nome = models.CharField(max_length=50, null=False)
 
+    def __str__(self):
+        return self.nome
+
 
 class Pessoa(models.Model):
     SEXO_CHOICES = (
@@ -22,23 +25,31 @@ class Pessoa(models.Model):
         return self.nome
 
 
-class FuncionarioSuporte(Pessoa):
-    tipo = models.CharField(max_length=50)
-    especializacao = models.CharField(max_length=20)
+class FuncionarioSuporte(models.Model):
+    tipo = models.CharField(max_length=50, null=False)
+    especializacao = models.CharField(max_length=20, null=False)
+    funcionario = models.ForeignKey(Pessoa, on_delete=models.CASCADE, blank=False)
 
-    func = models.ForeignKey(Pessoa, on_delete=models.CASCADE, blank=False)
+    # def __str__(self):
+    #     return self.funcionario
 
 
-class Funcionario(Pessoa):
+class Funcionario(models.Model):
     dep = models.ForeignKey(Departamento, on_delete=models.CASCADE, blank=False)
-    func = models.ForeignKey(Pessoa, on_delete=models.CASCADE, blank=False)
+    funcionario = models.ForeignKey(Pessoa, on_delete=models.CASCADE, blank=False)
+
+    # def __str__(self):
+    #     return self.funcionario.get_objects()
 
 
 class Categoria(models.Model):
     nome = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.nome
 
-class Status(models.Model):
+
+class Chamada(models.Model):
     STATUS_CHOICES = (
         ('aberto', 'Aberto'),
         ('em_andamento', 'Em Andamento'),
@@ -46,16 +57,15 @@ class Status(models.Model):
         ('cancelado', 'Cancelado'),
     )
 
-
-class Chamada(models.Model):
     titulo = models.CharField(max_length=50, null=False)
     Categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, blank=False)
     descricao = models.TextField()
     telefone = models.CharField(max_length=50, null=False)
     Departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE, blank=False)
-    data = models.DateField(null=False,verbose_name='Data da Abertura da chamada')
+    data = models.DateField(null=False, verbose_name='Data da Abertura da chamada')
+    status = models.CharField(max_length=20, null=False, choices=STATUS_CHOICES)
 
-    status=models.ForeignKey(Status,on_delete=models.CASCADE,blank=False)
+    # status = models.ForeignKey(Status, on_delete=models.CASCADE, blank=False)
 
     class Meta:
         verbose_name_plural = 'Chamadas'
@@ -63,9 +73,11 @@ class Chamada(models.Model):
     def __str__(self):
         return self.titulo
 
+
 class Atendimento(models.Model):
-    discricao=models.TextField()
-    atendimento=models.ManyToManyField(FuncionarioSuporte)
-    chamada=models.ManyToManyField(Chamada)
+    discricao = models.TextField()
+    atendimento = models.ManyToManyField(FuncionarioSuporte)
+    chamada = models.ManyToManyField(Chamada)
 
-
+    def __str__(self):
+        return self.discricao
