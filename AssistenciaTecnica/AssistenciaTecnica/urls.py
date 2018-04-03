@@ -17,10 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from suport.views import chamada
+from suport.views import chamada,chamada_list
 
 urlpatterns = [
     path('chamada/', chamada, name='chamada'),
+    path('chamada/usuario/(?P<pk>[0-9]+)', chamada_list, name='chamadas'),
     path('admin/', admin.site.urls),
 
 ]
