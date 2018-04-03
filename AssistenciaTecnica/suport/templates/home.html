@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+{% for chamada in lista %}
+
+<div class="collection">
+    <a href="{% url 'chamada'  %} "  class="collection-item">{{chamada.titulo}}</a>
+</div>
+
+{% endfor %}
+
+{% endblock conteudo %}
